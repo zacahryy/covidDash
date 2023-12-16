@@ -7,7 +7,7 @@ import Layout from "components/Layout";
 import Container from "components/Container";
 
 const SecondPage = () => {
-  const { companyName, companyUrl, authorName, authorUrl, siteDescription } =
+  const { companyName, companyUrl, authorName, siteDescription } =
     useSiteMetadata();
 
   return (
@@ -26,7 +26,7 @@ const SecondPage = () => {
 
         <h2>Created By</h2>
         <p>
-          <a href={authorUrl}>{authorName}</a>
+          {authorName}
         </p>
       </Container>
     </Layout>

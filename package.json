@@ -4,9 +4,7 @@
   "description": "A Gatsby starter with Leafet!",
   "version": "0.3.0",
   "author": {
-    "name": "Colby Fayock",
-    "email": "hello@colbyfayock.com",
-    "url": "https://twitter.com/colbyfayock"
+    "name": "Albert Nguyen, Marcus Gana, Kobe Andaya, Zachary Faulkner"
   },
   "dependencies": {
     "axios": "^1.6.2",
@@ -88,9 +86,9 @@
   "homepage": "https://gatsby-starter-leaflet.netlify.app/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/colbyfayock/gatsby-starter-leaflet"
+    "url": "https://github.com/zacahryy/covidDash"
   },
   "bugs": {
-    "url": "https://github.com/colbyfayock/gatsby-starter-leaflet/issues"
+    "url": "https://github.com/zacahryy/covidDash/issues"
   }
 }

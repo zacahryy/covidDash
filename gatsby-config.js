@@ -6,7 +6,6 @@ const siteMetadata = {
   companyName: title,
   companyUrl: repository.url,
   authorName: author.name,
-  authorUrl: author.url,
   siteUrl: homepage,
   siteDescription: description,
 };
