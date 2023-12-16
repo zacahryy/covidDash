@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, Component } from "react";
 import PropTypes from "prop-types";
 import { Helmet } from "react-helmet";
 import L from "leaflet";
@@ -154,32 +154,151 @@ MapEffect.propTypes = {
   markerRef: PropTypes.object,
 };
 
-const IndexPage = () => {
-  console.log('in IndexPage, before useRef');
-  const markerRef = useRef();
+// ... (your existing imports remain unchanged)
 
-  const mapSettings = {
-    center: CENTER,
-    defaultBaseMap: "OpenStreetMap",
-    zoom: DEFAULT_ZOOM,
-  };
 
-  return (
-    <Layout pageName="home">
-      <Helmet><title>Home Page</title></Helmet>
-      {/* do not delete MapEffect and Marker
-             with current code or axios will not run */}
-      <Map {...mapSettings}>
-       <MapEffect markerRef={markerRef} />            
-       <Marker ref={markerRef} position={CENTER} />
-      </Map>
+// ... (your existing imports remain unchanged)
 
-      <Container type="content" className="text-center home-start">
-        <h2>CSUF CPSC 349-02 COVID-19 Dashboard</h2>
-        <h6>All data sourced from: https://disease.sh/</h6>
-      </Container>
-    </Layout>
-  );
-};
+class IndexPage extends Component {
+  constructor(props) {
+    super(props);
+
+    this.markerRef = React.createRef(); // Initialize markerRef
+
+    this.state = {
+      statistics: [
+        { label: 'Global Deaths', key: 'globalDeaths', color: '#FF0000' }, // Red
+        { label: 'Global Cases', key: 'globalCases', color: '#00FF00' }, // Green
+        { label: 'Global Recovered', key: 'globalRecovered', color: '#0000FF' }, // Blue
+        { label: 'Global Fatal', key: 'globalFatal', color: '#FFA500' }, // Orange
+        { label: 'Global Daily Cases', key: 'globalDailyCases', color: '#800080' }, // Purple
+      ],
+      currentIndex: 0,
+      globalDeaths: null,
+      globalCases: null,
+      globalRecovered: null,
+      globalFatal: null,
+      globalDailyCases: null,
+    };
+  }
+
+  componentDidMount() {
+    // Fetch global COVID-19 data to get various statistics
+    this.fetchGlobalStatistics();
+
+    // Set up interval to rotate statistics every 5 seconds
+    this.interval = setInterval(() => {
+      this.rotateStatistics();
+    }, 5000);
+  }
+
+  componentWillUnmount() {
+    // Clear the interval to avoid memory leaks
+    clearInterval(this.interval);
+  }
+
+  fetchGlobalStatistics() {
+    axios
+      .get('https://disease.sh/v3/covid-19/all')
+      .then(response => {
+        const {
+          deaths,
+          cases,
+          recovered,
+          todayCases,
+          todayDeaths,
+        } = response.data;
+
+        this.setState({
+          globalDeaths: deaths,
+          globalCases: cases,
+          globalRecovered: recovered,
+          globalFatal: deaths, // Assuming deaths as fatal cases for simplicity
+          globalDailyCases: todayCases,
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching global data:', error);
+      });
+  }
+
+  rotateStatistics() {
+    const { statistics, currentIndex } = this.state;
+    const newIndex = (currentIndex + 1) % statistics.length;
+
+    // Fetch new data when rotating to a new statistic
+    this.fetchGlobalStatistics();
+
+    this.setState({
+      currentIndex: newIndex,
+    });
+  }
+
+  switchStatistic(index) {
+    // Manually switch to the selected statistic
+    this.setState({
+      currentIndex: index,
+    });
+  }
+
+  render() {
+    const { statistics, currentIndex } = this.state;
+    const currentStatistic = statistics[currentIndex];
+    const currentValue = this.state[currentStatistic.key];
+
+    const mapSettings = {
+      center: CENTER,
+      defaultBaseMap: 'OpenStreetMap',
+      zoom: DEFAULT_ZOOM,
+    };
+
+    return (
+      <Layout pageName="home">
+        <Helmet>
+          <title>Home Page</title>
+        </Helmet>
+
+        {/* Display current statistic with fade transition */}
+        <Container
+          type="content"
+          className="text-center global-statistics-box"
+          style={{ color: currentStatistic.color, transition: 'color 0.5s' }}
+        >
+          <div className="global-statistic">
+            <h3>{currentStatistic.label}</h3>
+            <p>{currentValue !== null ? currentValue.toLocaleString() : 'Loading...'}</p>
+          </div>
+        </Container>
+
+        {/* Buttons to switch between statistics */}
+        <Container type="content" className="text-center global-buttons">
+          {statistics.map((statistic, index) => (
+            <button
+              key={index}
+              className={index === currentIndex ? 'active' : ''}
+              onClick={() => this.switchStatistic(index)}
+            >
+              {statistic.label}
+            </button>
+          ))}
+        </Container>
+
+        <Map {...mapSettings}>
+          <MapEffect markerRef={this.markerRef} />
+          <Marker ref={this.markerRef} position={CENTER} />
+        </Map>
+
+        <Container type="content" className="text-center home-start">
+          <h2>CSUF CPSC 349-01 COVID-19 Dashboard</h2>
+          <h6>All data sourced from: https://disease.sh/</h6>
+        </Container>
+      </Layout>
+    );
+  }
+}
 
 export default IndexPage;
+
+
+
+
