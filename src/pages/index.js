@@ -154,11 +154,6 @@ MapEffect.propTypes = {
   markerRef: PropTypes.object,
 };
 
-// ... (your existing imports remain unchanged)
-
-
-// ... (your existing imports remain unchanged)
-
 class IndexPage extends Component {
   constructor(props) {
     super(props);
