@@ -1,20 +1,27 @@
-Covid Project
-Startup:
+# CSUF CPSC 349-02 COVID-19 Dashboard Project
 
-cd into project folder
+## Members:
 
-yarn start
+* Albert Nguyen
+* Marcus Gana
+* Zachary Faulkner
+* Kobe Andaya
+
+## Startup Instructions
+
+1. cd into project directory
+2. yarn start
 
 --------------------
 
-it that doesnt work run:
+If that doesnt work run:
 
-npm install --global yarn
+1. npm install --global yarn
 
-yarn add global gatsby-cli
+2. yarn add global gatsby-cli
 
-yarn add axios
+3. yarn add axios
 
-yarn install
+4. yarn install
 
-yarn start
+5. yarn start

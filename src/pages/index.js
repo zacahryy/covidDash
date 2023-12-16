@@ -175,7 +175,7 @@ const IndexPage = () => {
       </Map>
 
       <Container type="content" className="text-center home-start">
-        <h2>CSUF CPSC 349-01 COVID-19 Dashboard</h2>
+        <h2>CSUF CPSC 349-02 COVID-19 Dashboard</h2>
         <h6>All data sourced from: https://disease.sh/</h6>
       </Container>
     </Layout>
