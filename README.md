@@ -14,7 +14,7 @@
 
 --------------------
 
-If that doesnt work run:
+If that doesn't work run:
 
 1. npm install --global yarn
 
